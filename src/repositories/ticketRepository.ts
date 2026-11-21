@@ -18,3 +18,12 @@ export function createTicket(data: {
         data
     });
 }
+export function updateTicket(id: number, data: {
+    title?: string;
+    status?: string;
+}) {
+    return prisma.ticket.update({
+        where: { id },
+        data
+    });
+}

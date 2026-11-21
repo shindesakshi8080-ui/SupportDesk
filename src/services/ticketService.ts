@@ -14,3 +14,9 @@ export async function createTicket(data: {
 }) {
     return ticketRepository.createTicket(data);
 }
+export async function updateTicket(id: number, data: {
+    title?: string;
+    status?: string;
+}) {
+    return ticketRepository.updateTicket(id, data);
+}
