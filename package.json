@@ -19,6 +19,13 @@
   },
   "homepage": "https://github.com/shindesakshi8080-ui/SupportDesk#readme",
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

@@ -1,0 +1,252 @@
+[
+  {
+    "id": "1",
+    "title": "Login issue",
+    "status": "Open"
+  },
+  {
+    "id": "2",
+    "title": "Payment issue",
+    "status": "Closed"
+  },
+  {
+    "id": "3",
+    "title": "Password reset problem",
+    "status": "Open"
+  },
+  {
+    "id": "4",
+    "title": "Unable to access dashboard",
+    "status": "Open"
+  },
+  {
+    "id": "5",
+    "title": "Email notification missing",
+    "status": "Closed"
+  },
+  {
+    "id": "6",
+    "title": "Account activation issue",
+    "status": "Open"
+  },
+  {
+    "id": "7",
+    "title": "Profile update problem",
+    "status": "Closed"
+  },
+  {
+    "id": "8",
+    "title": "Website loading slowly",
+    "status": "Open"
+  },
+  {
+    "id": "9",
+    "title": "File upload failure",
+    "status": "Open"
+  },
+  {
+    "id": "10",
+    "title": "Incorrect invoice details",
+    "status": "Closed"
+  },
+  {
+    "id": "11",
+    "title": "Two factor authentication issue",
+    "status": "Open"
+  },
+  {
+    "id": "12",
+    "title": "Application login timeout",
+    "status": "Open"
+  },
+  {
+    "id": "13",
+    "title": "User registration problem",
+    "status": "Closed"
+  },
+  {
+    "id": "14",
+    "title": "Report download failure",
+    "status": "Open"
+  },
+  {
+    "id": "15",
+    "title": "Subscription renewal issue",
+    "status": "Closed"
+  },
+  {
+    "id": "16",
+    "title": "Dashboard display error",
+    "status": "Open"
+  },
+  {
+    "id": "17",
+    "title": "Password change request",
+    "status": "Open"
+  },
+  {
+    "id": "18",
+    "title": "Payment confirmation missing",
+    "status": "Closed"
+  },
+  {
+    "id": "19",
+    "title": "Search functionality issue",
+    "status": "Open"
+  },
+  {
+    "id": "20",
+    "title": "Account verification delay",
+    "status": "Open"
+  },
+  {
+    "id": "21",
+    "title": "Unable to update profile",
+    "status": "Closed"
+  },
+  {
+    "id": "22",
+    "title": "Server connection problem",
+    "status": "Open"
+  },
+  {
+    "id": "23",
+    "title": "Ticket submission failure",
+    "status": "Open"
+  },
+  {
+    "id": "24",
+    "title": "Notification settings issue",
+    "status": "Closed"
+  },
+  {
+    "id": "25",
+    "title": "Document preview error",
+    "status": "Open"
+  },
+  {
+    "id": "26",
+    "title": "Mobile application crash",
+    "status": "Open"
+  },
+  {
+    "id": "27",
+    "title": "Incorrect account information",
+    "status": "Closed"
+  },
+  {
+    "id": "28",
+    "title": "Session expired unexpectedly",
+    "status": "Open"
+  },
+  {
+    "id": "29",
+    "title": "Data synchronization problem",
+    "status": "Open"
+  },
+  {
+    "id": "30",
+    "title": "Invoice download issue",
+    "status": "Closed"
+  },
+  {
+    "id": "31",
+    "title": "Customer portal access issue",
+    "status": "Open"
+  },
+  {
+    "id": "32",
+    "title": "Attachment upload problem",
+    "status": "Open"
+  },
+  {
+    "id": "33",
+    "title": "Email verification failure",
+    "status": "Closed"
+  },
+  {
+    "id": "34",
+    "title": "Application performance issue",
+    "status": "Open"
+  },
+  {
+    "id": "35",
+    "title": "Duplicate payment entry",
+    "status": "Closed"
+  },
+  {
+    "id": "36",
+    "title": "User permissions problem",
+    "status": "Open"
+  },
+  {
+    "id": "37",
+    "title": "Report generation failure",
+    "status": "Open"
+  },
+  {
+    "id": "38",
+    "title": "Unable to reset password",
+    "status": "Closed"
+  },
+  {
+    "id": "39",
+    "title": "Dashboard navigation issue",
+    "status": "Open"
+  },
+  {
+    "id": "40",
+    "title": "Payment gateway timeout",
+    "status": "Open"
+  },
+  {
+    "id": "41",
+    "title": "Account suspension query",
+    "status": "Closed"
+  },
+  {
+    "id": "42",
+    "title": "File download interruption",
+    "status": "Open"
+  },
+  {
+    "id": "43",
+    "title": "Profile picture upload issue",
+    "status": "Open"
+  },
+  {
+    "id": "44",
+    "title": "Missing transaction record",
+    "status": "Closed"
+  },
+  {
+    "id": "45",
+    "title": "Login authentication failure",
+    "status": "Open"
+  },
+  {
+    "id": "46",
+    "title": "Incorrect notification status",
+    "status": "Open"
+  },
+  {
+    "id": "47",
+    "title": "Application access denied",
+    "status": "Closed"
+  },
+  {
+    "id": "48",
+    "title": "Database connection timeout",
+    "status": "Open"
+  },
+  {
+    "id": "49",
+    "title": "Ticket status update failure",
+    "status": "Open"
+  },
+  {
+    "id": "50",
+    "title": "General technical support request",
+    "status": "Closed"
+  }
+]

@@ -1,0 +1,51 @@
+﻿id,title,status
+1,Login issue,Open
+2,Payment issue,Closed
+3,Password reset problem,Open
+4,Unable to access dashboard,Open
+5,Email notification missing,Closed
+6,Account activation issue,Open
+7,Profile update problem,Closed
+8,Website loading slowly,Open
+9,File upload failure,Open
+10,Incorrect invoice details,Closed
+11,Two factor authentication issue,Open
+12,Application login timeout,Open
+13,User registration problem,Closed
+14,Report download failure,Open
+15,Subscription renewal issue,Closed
+16,Dashboard display error,Open
+17,Password change request,Open
+18,Payment confirmation missing,Closed
+19,Search functionality issue,Open
+20,Account verification delay,Open
+21,Unable to update profile,Closed
+22,Server connection problem,Open
+23,Ticket submission failure,Open
+24,Notification settings issue,Closed
+25,Document preview error,Open
+26,Mobile application crash,Open
+27,Incorrect account information,Closed
+28,Session expired unexpectedly,Open
+29,Data synchronization problem,Open
+30,Invoice download issue,Closed
+31,Customer portal access issue,Open
+32,Attachment upload problem,Open
+33,Email verification failure,Closed
+34,Application performance issue,Open
+35,Duplicate payment entry,Closed
+36,User permissions problem,Open
+37,Report generation failure,Open
+38,Unable to reset password,Closed
+39,Dashboard navigation issue,Open
+40,Payment gateway timeout,Open
+41,Account suspension query,Closed
+42,File download interruption,Open
+43,Profile picture upload issue,Open
+44,Missing transaction record,Closed
+45,Login authentication failure,Open
+46,Incorrect notification status,Open
+47,Application access denied,Closed
+48,Database connection timeout,Open
+49,Ticket status update failure,Open
+50,General technical support request,Closed
