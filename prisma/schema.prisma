@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,8 +8,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  CUSTOMER
+  AGENT
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CUSTOMER)
+  tickets      Ticket[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Ticket {
-  id     Int    @id @default(autoincrement())
-  title  String
-  status String
+  id         Int      @id @default(autoincrement())
+  title      String
+  status     String
+  customerId Int?
+  customer   User?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
 }
