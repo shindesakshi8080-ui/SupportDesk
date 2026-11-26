@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,25 +8,101 @@ datasource db {
 }
 
 enum Role {
-  CUSTOMER
+  ADMIN
   AGENT
+  CUSTOMER
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(CUSTOMER)
-  tickets      Ticket[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String
+  email           String          @unique
+  passwordHash    String          @map("password_hash")
+  role            Role            @default(CUSTOMER)
+  tickets         Ticket[]        @relation("TicketRequester")
+  assignedTickets Ticket[]        @relation("AssignedAgent")
+  comments        Comment[]
+  ticketHistory   TicketHistory[] @relation("HistoryChangedBy")
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime        @map("updated_at") @db.Timestamptz(6)
+
+  @@map("users")
 }
 
 model Ticket {
-  id         Int      @id @default(autoincrement())
-  title      String
-  status     String
-  customerId Int?
-  customer   User?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  id              String         @id @default(uuid()) @db.Uuid
+  ticketNumber    String         @unique @map("ticket_number")
+  title           String
+  description     String
+  status          TicketStatus    @default(OPEN)
+  priority        TicketPriority  @default(MEDIUM)
+  userId          String         @map("user_id") @db.Uuid
+  assignedAgentId String?        @map("assigned_agent_id") @db.Uuid
+  categoryId      String         @map("category_id") @db.Uuid
+  user            User           @relation("TicketRequester", fields: [userId], references: [id])
+  assignedAgent   User?          @relation("AssignedAgent", fields: [assignedAgentId], references: [id])
+  category        Category       @relation(fields: [categoryId], references: [id])
+  comments        Comment[]
+  history         TicketHistory[]
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @map("updated_at") @db.Timestamptz(6)
+
+  @@index([assignedAgentId])
+  @@index([categoryId])
+  @@index([priority])
+  @@index([status])
+  @@index([userId])
+  @@map("tickets")
+}
+
+model Category {
+  id      String   @id @default(uuid()) @db.Uuid
+  name    String   @unique
+  tickets Ticket[]
+
+  @@map("categories")
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  ticketId  String   @map("ticket_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  message   String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([ticketId])
+  @@index([userId])
+  @@map("comments")
+}
+
+model TicketHistory {
+  id        String   @id @default(uuid()) @db.Uuid
+  ticketId  String   @map("ticket_id") @db.Uuid
+  changedBy String?  @map("changed_by") @db.Uuid
+  action    String
+  oldValue  Json?    @map("old_value") @db.JsonB
+  newValue  Json?    @map("new_value") @db.JsonB
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User?    @relation("HistoryChangedBy", fields: [changedBy], references: [id])
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([changedBy])
+  @@index([ticketId])
+  @@map("ticket_history")
 }
