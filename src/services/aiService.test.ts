@@ -179,6 +179,25 @@ test("categorization validates provider output against existing categories and p
     }]);
 });
 
+test("usage cost is recorded only when actual token counts and both prices are available", async () => {
+    for (const prices of [
+        { inputPricePerMillion: undefined, outputPricePerMillion: undefined },
+        { inputPricePerMillion: 2, outputPricePerMillion: undefined },
+    ]) {
+        const { service, records } = createService(prices);
+        await service.suggestCategorization(
+            ticket,
+            new AbortController().signal
+        );
+
+        assert.deepEqual(records, [{
+            feature: "categorization",
+            inputTokens: 500,
+            outputTokens: 1_000,
+        }]);
+    }
+});
+
 test("categorization rejects malformed JSON", async () => {
     const { service } = createService({
         provider: provider({
@@ -325,6 +344,8 @@ test("mock-mode reply and classification succeed without recording fabricated us
                 usage: undefined,
             }),
         }),
+        inputPricePerMillion: undefined,
+        outputPricePerMillion: undefined,
         usageRequired: false,
     });
 
