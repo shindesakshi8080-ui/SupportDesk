@@ -32,3 +32,22 @@
 - Added clear instructions and specific requirements.
 - Used simple language and structured output formats.
 - Learned how better prompts improve AI responses.
+
+## Day 4: Versioned AI Prompts and OpenAI Client
+
+### Prompt planning
+- Keep stable support-reply and ticket-categorization policies in separate, versioned prompt templates.
+- Pass serialized ticket details, comments, and category data through the provider's input field as untrusted data; do not combine ticket content with trusted instructions.
+- Keep server credentials and OpenAI client construction in backend-only code.
+- Record token counts only when returned by the provider, and calculate an estimated cost only when both configured prices and actual usage are present.
+
+### Implementation
+- Added `src/ai/prompts/v1/suggestReply.ts` and `src/ai/prompts/v1/categorization.ts`, and wired each into its corresponding OpenAI request.
+- Added `src/ai/openAiClient.ts` for lazy, server-side OpenAI client construction; it does not log or return the API key.
+- Kept provider selection, request inputs, structured categorization, streaming, and cancellation behavior unchanged.
+- Kept mock mode independent of external providers and provider usage; no token counts or costs are fabricated.
+
+### Verification
+- Backend: `npm.cmd run typecheck` passed; `npm.cmd run build` passed; all 27 backend Node tests passed.
+- Frontend: `npm.cmd run typecheck` passed; `npm.cmd run test:run` passed (27 tests across 4 files); `npm.cmd run build` passed.
+- Provider tests use a local mock client to verify request separation, prompts, stream handling, and reported usage. No live OpenAI or Gemini calls were made; paid API behavior was not verified.
