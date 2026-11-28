@@ -1,8 +1,10 @@
 const express = require("express");
 const ticketRoutes = require("./routes/ticketRoutes");
+const requestLogger = require("./middleware/requestLogger");
 
 const app = express();
 
+app.use(requestLogger);
 app.use(express.json());
 
 app.get("/", (req, res) => {
