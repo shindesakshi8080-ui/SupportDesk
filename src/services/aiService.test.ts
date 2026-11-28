@@ -368,3 +368,160 @@ test("provider selection uses only the explicitly configured provider", () => {
     assert.equal(selectAiProvider("gemini", providers), gemini);
     assert.equal(selectAiProvider("openai", providers), openai);
 });
+test("reply generation rejects oversized ticket titles before calling the provider", async () => {
+    let providerCalled = false;
+
+    const { service } = createService({
+        provider: provider({
+            streamReply: async () => {
+                providerCalled = true;
+                return streamOf();
+            },
+        }),
+    });
+
+    await assert.rejects(
+        service.createReplyStream(
+            { ...ticket, title: "T".repeat(1001) },
+            new AbortController().signal
+        ),
+        (error: unknown) =>
+            error instanceof AiServiceError &&
+            error.code === "AI_INPUT_TOO_LARGE" &&
+            error.status === 413
+    );
+
+    assert.equal(providerCalled, false);
+});
+
+test("reply generation rejects oversized ticket descriptions before calling the provider", async () => {
+    let providerCalled = false;
+
+    const { service } = createService({
+        provider: provider({
+            streamReply: async () => {
+                providerCalled = true;
+                return streamOf();
+            },
+        }),
+    });
+
+    await assert.rejects(
+        service.createReplyStream(
+            { ...ticket, description: "D".repeat(8001) },
+            new AbortController().signal
+        ),
+        (error: unknown) =>
+            error instanceof AiServiceError &&
+            error.code === "AI_INPUT_TOO_LARGE" &&
+            error.status === 413
+    );
+
+    assert.equal(providerCalled, false);
+});
+
+test("reply generation rejects oversized comments before calling the provider", async () => {
+    let providerCalled = false;
+
+    const { service } = createService({
+        getLatestComments: async () => [
+            {
+                message: "C".repeat(2001),
+                createdAt: new Date("2026-01-01"),
+            },
+        ],
+        provider: provider({
+            streamReply: async () => {
+                providerCalled = true;
+                return streamOf();
+            },
+        }),
+    });
+
+    await assert.rejects(
+        service.createReplyStream(ticket, new AbortController().signal),
+        (error: unknown) =>
+            error instanceof AiServiceError &&
+            error.code === "AI_INPUT_TOO_LARGE" &&
+            error.status === 413
+    );
+
+    assert.equal(providerCalled, false);
+});
+
+test("reply generation sends masked PII to the provider", async () => {
+    let providerInput = "";
+
+    const sensitiveTicket = {
+        ...ticket,
+        title: "Contact sakshi@example.com",
+        description: "Call me at 9876543210",
+    };
+
+    const { service } = createService({
+        provider: provider({
+            streamReply: async (input) => {
+                providerInput = input;
+                return streamOf(
+                    { type: "delta", text: "Please contact support." },
+                    {
+                        type: "completed",
+                        status: "completed",
+                        outputText: "Please contact support.",
+                        usage,
+                    }
+                );
+            },
+        }),
+        getLatestComments: async () => [],
+    });
+
+    const reply = await service.createReplyStream(
+        sensitiveTicket,
+        new AbortController().signal
+    );
+
+    await collectReply(reply);
+
+    assert.ok(providerInput.includes("[EMAIL REDACTED]"));
+    assert.ok(providerInput.includes("[PHONE REDACTED]"));
+    assert.ok(!providerInput.includes("sakshi@example.com"));
+    assert.ok(!providerInput.includes("9876543210"));
+});
+
+test("categorization sends masked PII to the provider", async () => {
+    let providerInput = "";
+
+    const sensitiveTicket = {
+        ...ticket,
+        title: "Contact sakshi@example.com",
+        description: "Call me at 9876543210",
+    };
+
+    const { service } = createService({
+        provider: provider({
+            classify: async (input) => {
+                providerInput = input;
+                return {
+                    status: "completed",
+                    outputText: JSON.stringify({
+                        categoryName: "Account access",
+                        priority: "HIGH",
+                    }),
+                    usage,
+                };
+            },
+        }),
+        getLatestComments: async () => [],
+    });
+
+    await service.suggestCategorization(
+        sensitiveTicket,
+        new AbortController().signal
+    );
+
+    assert.ok(providerInput.includes("[EMAIL REDACTED]"));
+    assert.ok(providerInput.includes("[PHONE REDACTED]"));
+    assert.ok(!providerInput.includes("sakshi@example.com"));
+    assert.ok(!providerInput.includes("9876543210"));
+});

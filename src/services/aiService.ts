@@ -1,3 +1,4 @@
+import { maskPii } from "../ai/maskPii";
 import type { Ticket } from "@prisma/client";
 import { z } from "zod";
 import { env } from "../config/env";
@@ -17,6 +18,7 @@ import {
 const MAX_COMMENT_COUNT = 10;
 const MAX_COMMENT_LENGTH = 2_000;
 const MAX_DESCRIPTION_LENGTH = 8_000;
+const MAX_TITLE_LENGTH = 1_000;
 
 const usageSchema = z.object({
     input_tokens: z.number().int().nonnegative(),
@@ -104,16 +106,29 @@ function formatUsage(
     return record;
 }
 
+
 function ticketContext(
     ticket: AiTicket,
     comments: TicketComment[]
 ): { title: string; description: string; comments: string[] } {
-    return {
-        title: ticket.title.slice(0, 1_000),
-        description: ticket.description.slice(0, MAX_DESCRIPTION_LENGTH),
-        comments: comments
-            .slice(-MAX_COMMENT_COUNT)
-            .map(({ message }) => message.slice(0, MAX_COMMENT_LENGTH)),
+    const latestComments = comments.slice(-MAX_COMMENT_COUNT);
+
+    if (
+        ticket.title.length > MAX_TITLE_LENGTH ||
+        ticket.description.length > MAX_DESCRIPTION_LENGTH ||
+        latestComments.some(({ message }) => message.length > MAX_COMMENT_LENGTH)
+    ) {
+        throw new AiServiceError(
+            "Ticket content exceeds the allowed length for AI processing",
+            "AI_INPUT_TOO_LARGE",
+            413
+        );
+    }
+
+       return {
+        title: maskPii(ticket.title),
+        description: maskPii(ticket.description),
+        comments: latestComments.map(({ message }) => maskPii(message)),
     };
 }
 
